@@ -1,6 +1,8 @@
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 
+#include <fstream>
+
 #include "polygon.h"
 #include "point.h"
 
@@ -105,10 +107,12 @@ bool isInsidePolygon(Polygon2D<T> polygon, Point2D<T> p)
     if (n < 3) return false;
  
     // Create a point for line segment from p to infinite
-    //TPoint extreme (INT_MAX, p.y());
+    TPoint extreme (INT_MAX, p.y());
+    /*
     TPoint extreme1 (p.x(), INT_MAX/1e6);
     TPoint extreme2 (INT_MAX/1e6, p.y());
     TPoint extreme = findDirection(polygon, p, extreme1, extreme2);
+    */
     // Check p is a vertex of polygon, then it is inside
     if(extreme==p)
         return true;
@@ -138,24 +142,101 @@ bool isInsidePolygon(Polygon2D<T> polygon, Point2D<T> p)
 }
 
 template<typename T>
-std::vector<Point2D<T> > GaussDigization(Polygon2D<T> polygon)
+std::vector<Point2Di> GaussDigization(Polygon2D<T> polygon)
 {
     typedef Point2D<T> TPoint;
-    std::vector<TPoint> gd;
+    std::vector<Point2Di> gd;
     std::pair<TPoint, TPoint> bb = polygon.getBoundingBox();
-    int minx = int(bb.first.x());
-    int miny = int(bb.first.y());
-    int maxx = int(bb.second.x());
-    int maxy = int(bb.second.y());
-    std::cout<<minx<<" and "<<miny<<" and "<<maxx<<" and "<<maxy<<std::endl;
+    int minx = int(bb.first.x())-1;
+    int miny = int(bb.first.y())-1;
+    int maxx = int(bb.second.x())+1;
+    int maxy = int(bb.second.y())+1;
     for(int x = minx; x<maxx; x++) {
         for(int y = miny; y<maxy; y++) {
             TPoint p(x,y);
-            if(polygon.isInside(p))
-                gd.push_back(p);
+            if(polygon.isInside(p)) {
+                Point2Di pi(int(p.x()),int(p.y()));
+                gd.push_back(pi);
+            }
         }
     }
     return gd;
+}
+
+template<typename T>
+Polygon2D<T> readFile2D(std::string filename)
+{
+    typedef Point2D<T> TPoint;
+    Polygon2D<T> polyline;
+    std::string line;
+    std::ifstream file (filename);
+    if (file.is_open())
+    {
+        T x, y;
+        while ( file >> x >> y )
+        {
+            TPoint p(x,y);
+            polyline.push_back(p);
+        }
+        file.close();
+    }
+    else std::cout << "Unable to open file";
+    return polyline;
+}
+
+template<typename T >
+Polygon3D<T> readFile3D(std::string filename)
+{
+    typedef Point3D<T> TPoint;
+    Polygon3D<T> polyline;
+    std::string line;
+    std::ifstream file (filename);
+    if (file.is_open())
+    {
+        T x, y, z;
+        while ( file >> x >> y >> z)
+        {
+            TPoint p(x,y, z);
+            polyline.push_back(p);
+        }
+        file.close();
+    }
+    else std::cout << "Unable to open file";
+    return polyline;
+}
+
+template<typename T>
+void writeFile2D(std::string filename, std::vector<Point2D<T> > pts)
+{
+    typedef Point2D<T> TPoint;
+    
+    std::string line;
+    std::ofstream file (filename);
+    if (file.is_open())
+    {
+        for(size_t it=0; it<pts.size(); it++) {
+            TPoint p = pts.at(it);
+            file << p.x() << " " << p.y() << std::endl;
+        }
+    }
+    else std::cout << "Unable to open file";
+}
+
+template<typename T>
+void writeFile3D(std::string filename, std::vector<Point3D<T> > pts)
+{
+    typedef Point3D<T> TPoint;
+    
+    std::string line;
+    std::ofstream file (filename);
+    if (file.is_open())
+    {
+        for(size_t it=0; it<pts.size(); it++) {
+            TPoint p = pts.at(it);
+            file << p.x() << " " << p.y() << " " << p.z() << std::endl;
+        }
+    }
+    else std::cout << "Unable to open file";
 }
 
 #endif // FUNCTIONS_H

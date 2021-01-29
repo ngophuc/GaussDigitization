@@ -43,15 +43,7 @@ public:
                 return false;
         return true;
     }
-    /*
-     friend bool operator==(Point& lhs, Point& rhs)
-     {
-         for(int i = 0; i < dim; i++)
-             if (lhs[i] != rhs[i])
-                 return false;
-         return true;
-     }
-     */
+    
     //const T & operator[](const size_t index) const
     T & operator[](const size_t index)
     {

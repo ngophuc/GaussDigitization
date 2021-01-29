@@ -22,6 +22,16 @@ public:
         return elements_.at(index);
     }
     
+    TPoint& front()
+    {
+        return elements_.at(0);
+    }
+    
+    TPoint& back()
+    {
+        return elements_.at(elements_.size()-1);
+    }
+    
     size_t size()
     {
         return elements_.size();
@@ -63,6 +73,14 @@ public:
         return std::make_pair(tl,rb);
     }
     
+    friend std::ostream& operator<<(std::ostream& out, Polygon2D & poly)
+    {
+        std::string s = "Polygon: ";
+        for(int i = 0; i < poly.size(); i++)
+            s += "(" + std::to_string(poly.at(i).x())  + "," + std::to_string(poly.at(i).y()) + ") ";
+        return out << s;
+    }
+    
     bool isInside(Point2D<T> p) {
         return isInsidePolygon<T>(*this, p);
     }
@@ -100,7 +118,14 @@ public:
         Point3D<T> rb (maxX,maxY,maxZ);
         return std::make_pair(tl,rb);
     }
-
+    
+    friend std::ostream& operator<<(std::ostream& out, Polygon3D & poly)
+    {
+        std::string s = "Polygon: ";
+        for(int i = 0; i < poly.size(); i++)
+            s += "(" + std::to_string(poly.at(i).x())  + "," + std::to_string(poly.at(i).y())  + "," + std::to_string(poly.at(i).z())  + ") ";
+        return out << s;
+    }
 };
 
 typedef Polygon2D< int > Polygon2Di;
