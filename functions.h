@@ -107,12 +107,11 @@ bool isInsidePolygon(Polygon2D<T> polygon, Point2D<T> p)
     if (n < 3) return false;
  
     // Create a point for line segment from p to infinite
-    TPoint extreme (INT_MAX, p.y());
-    /*
+    // Find the direction without containing any polygon vertices
     TPoint extreme1 (p.x(), INT_MAX/1e6);
     TPoint extreme2 (INT_MAX/1e6, p.y());
     TPoint extreme = findDirection(polygon, p, extreme1, extreme2);
-    */
+
     // Check p is a vertex of polygon, then it is inside
     if(extreme==p)
         return true;
@@ -180,7 +179,10 @@ Polygon2D<T> readFile2D(std::string filename)
         }
         file.close();
     }
-    else std::cout << "Unable to open file";
+    else {
+        std::cout << "Unable to open file"<<std::endl;
+        exit(EXIT_FAILURE);
+    }
     return polyline;
 }
 
@@ -201,7 +203,10 @@ Polygon3D<T> readFile3D(std::string filename)
         }
         file.close();
     }
-    else std::cout << "Unable to open file";
+    else {
+        std::cout << "Unable to open file"<<std::endl;
+        exit(EXIT_FAILURE);
+    }
     return polyline;
 }
 
@@ -219,7 +224,10 @@ void writeFile2D(std::string filename, std::vector<Point2D<T> > pts)
             file << p.x() << " " << p.y() << std::endl;
         }
     }
-    else std::cout << "Unable to open file";
+    else {
+        std::cout << "Unable to open file"<<std::endl;
+        exit(EXIT_FAILURE);
+    }
 }
 
 template<typename T>
@@ -236,7 +244,10 @@ void writeFile3D(std::string filename, std::vector<Point3D<T> > pts)
             file << p.x() << " " << p.y() << " " << p.z() << std::endl;
         }
     }
-    else std::cout << "Unable to open file";
+    else {
+        std::cout << "Unable to open file"<<std::endl;
+        exit(EXIT_FAILURE);
+    }
 }
 
 #endif // FUNCTIONS_H

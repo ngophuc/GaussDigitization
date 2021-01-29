@@ -8,14 +8,20 @@
 
 int main(int argc, char** argv)
 {
-    Polygon2Di poly = readFile2D<int>("pts.2d");
-    std::cout<<"poly1.size()="<<poly.size()<<poly<<std::endl;
+    std::string filename = "../Samples/circle10.2d";
+    if(argc==2)
+        filename = argv[1];//input
+    else
+        std::cout<<"Usage: ./GaussDigitization points_filename"<<std::endl;
+    
+    //Read input polygon
+    Polygon2Di poly = readFile2D<int>(filename);
+    //Compute Gauss digitization of the polygon
     std::vector<Point2Di> gd = GaussDigization(poly);
-    std::cout<<"gdr.size()="<<gd.size()<<std::endl;
     
 #ifdef WITH_DGTAL
     //std::cout<<"WITH_DGTAL"<<std::endl;
-    int width = 1;
+    int width = 5;
     int border = 2;
     std::pair<Point2Di, Point2Di> bb = poly.getBoundingBox();
     DGtal::Z2i::Point d1( bb.first.x() - border, bb.first.y() - border );
@@ -41,10 +47,11 @@ int main(int argc, char** argv)
     DGtal::Z2i::RealPoint p2 (poly.back().x(),poly.back().y());
     board.drawLine(p1[0],p1[1],p2[0],p2[1]);
     //Save result
-    board.saveSVG("gd.svg");
+    board.saveSVG("out.svg");
 #else
-    ;//std::cout<<"WITHOUT_DGTAL"<<std::endl;
+    std::cout<<"WITHOUT_DGTAL"<<std::endl;
 #endif
-    writeFile2D("gd.txt", gd);
+    //Save result
+    writeFile2D("out.txt", gd);
     return EXIT_SUCCESS;
 }
