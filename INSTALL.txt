@@ -1,0 +1,28 @@
+Dependancies:
+-------------
+This program is has no dependancy. 
+If you want to output images, then you can use the DGtal Library. 
+You need to install the last version available here:
+https://github.com/DGtal-team/DGtal
+
+git clone https://github.com/DGtal-team/DGtal.git
+cd DGtal ; mkdir buid ; cd build
+cmake ..
+make install
+
+Main installation:
+-------------------
+
+To install the tools you have to follow the following steps:
+
+- Main tool installation:
+  From the GaussDigitization directory:
+    mkdir build; cd build
+    cmake ..
+    make -j 5
+    
+- To activate DGtal:
+  From the GaussDigitization directory:
+    mkdir build; cd build
+    cmake .. -DWITH_GMP=true
+    make -j 5
