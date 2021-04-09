@@ -12,27 +12,32 @@ public:
     //Point(const Point& rhs) : elements_(rhs.elements_) {}
     virtual ~Point() {}
 
-    Point & operator=(const Point& rhs) { return *this; }
+    Point & operator=(const Point& rhs)
+    {
+        for(int i = 0; i < dim; i++)
+            elements_[i] = rhs.elements_[i];
+        return *this;
+    }
 
     Point operator+(const Point& p)
     {
         Point ret;
         for(int i = 0; i < dim; i++)
-            ret[i] += elements_[i] + p[i];
+            ret[i] += elements_[i] + p.elements_[i];
         return ret;
     }
 
     Point & operator+=( const Point& p)
     {
         for(int i = 0; i < dim; i++)
-            elements_[i] += p[i];
+            elements_[i] += p.elements_[i];
         return *this;
     }
 
     Point & operator-=( const Point& p)
     {
         for(int i = 0; i < dim; i++)
-            elements_[i] -= p[i];
+            elements_[i] -= p.elements_[i];
         return *this;
     }
 
@@ -48,6 +53,15 @@ public:
     T & operator[](const size_t index)
     {
         return elements_[index];
+    }
+    
+    double distance(const Point& p) {
+        double d=0;
+        for(int i = 0; i < dim; i++) {
+            double v = elements_[i]*p.elements_[i];
+            d += v*v;
+        }
+        return sqrt(d);
     }
     
     friend std::ostream& operator<<(std::ostream& out, Point & p)

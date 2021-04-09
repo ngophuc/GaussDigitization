@@ -4,16 +4,13 @@
 #include "DGtal/io/boards/Board2D.h"
 #include "DGtal/io/Color.h"
 #include "DGtal/helpers/StdDefs.h"
+
+#include "DGtal/io/readers/MeshReader.h"
+#include "DGtal/io/writers/MeshWriter.h"
+#include "DGtal/io/viewers/Viewer3D.h"
 #endif
 
-int main(int argc, char** argv)
-{
-    std::string filename = "../Samples/circle10.2d";
-    if(argc==2)
-        filename = argv[1];//input
-    else
-        std::cout<<"Usage: ./GaussDigitization points_filename"<<std::endl;
-    
+void test2D(std::string filename) {
     //Read input polygon
     Polygon2Di poly = readFile2D<int>(filename);
     //Compute Gauss digitization of the polygon
@@ -53,5 +50,58 @@ int main(int argc, char** argv)
 #endif
     //Save result
     writeFile2D("out.txt", gd);
+}
+
+void test3D(std::string filename,int argc, char** argv) {
+    
+#ifdef WITH_DGTAL
+    DGtal::Mesh<DGtal::Z3i::RealPoint> aMesh;
+    DGtal::MeshReader<DGtal::Z3i::RealPoint>::importOFFFile(filename,aMesh);
+    QApplication application(argc,argv);
+    DGtal::Viewer3D<> viewer;
+    viewer.show();
+#endif
+    
+    std::vector<Point3Dd> Points;
+    std::vector<std::vector<unsigned int> > Faces;
+    Mesh3Dd mesh = readFile3D<double>(filename);
+    Points = mesh.getVertices();
+    Faces = mesh.getFaces();
+    
+    std::vector<Point3Di> gd = GaussDigization<double>(Points,Faces);
+    
+#ifdef WITH_DGTAL
+    for (size_t it = 0; it < gd.size(); it++) {
+        DGtal::Z3i::RealPoint voxel(gd.at(it).x(),gd.at(it).y(),gd.at(it).z());
+        viewer.addCube(voxel,1);
+    }
+
+    viewer << DGtal::Viewer3D<>::updateDisplay;
+    application.exec();
+#endif
+    //Save result
+    writeFile3D("out.txt", gd);
+}
+
+int main(int argc, char** argv)
+{
+    std::string filename = "../Samples/circle10.2d";
+    bool is2D = true;
+    if(argc>=2) {
+        filename = argv[1];//input
+        if(argc==3) {
+            std::string is3D = argv[2];
+            if(is3D.compare("3D")==0)
+               is2D = false;
+        }
+    }
+    else
+        std::cout<<"Usage: ./GaussDigitization input_filename [3D]"<<std::endl;
+    
+    if(!is2D)
+        test3D(filename,argc,argv);
+    else
+        test2D(filename);
+    
     return EXIT_SUCCESS;
 }
