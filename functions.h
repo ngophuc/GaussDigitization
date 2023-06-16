@@ -9,8 +9,9 @@
 #include "polygon.h"
 #include "point.h"
 
-#include "DGtal/helpers/StdDefs.h"
-using namespace DGtal;
+
+//#include "DGtal/helpers/StdDefs.h"
+//using namespace DGtal;
 
 /* Source adapted from : https://www.geeksforgeeks.org/how-to-check-if-a-given-point-lies-inside-a-polygon/ */
 // Given three colinear points p, q, r, the function checks if
@@ -404,27 +405,6 @@ std::list<FacePoint> listFaces(std::vector<Point3D<T> > Vertices,std::vector<std
         }
     }
     return listDeFaces;
-}
-
-std::pair<Z3i::RealPoint,Z3i::RealPoint> getBoundingBox(std::vector<Z3i::RealPoint> Points){
-    double minX,minY,minZ,maxX,maxY,maxZ;
-    auto point = Points.begin();
-    minX = (*point)[0]; minY = (*point)[1]; minZ = (*point)[2];
-    maxX = (*point)[0]; maxY = (*point)[1]; maxZ = (*point)[2];
-    ++point;
-    for (; point != Points.end(); ++point){
-        if ((*point)[0]<minX) minX = (*point)[0];
-        if ((*point)[0]>maxX) maxX = (*point)[0];
-        
-        if ((*point)[1]<minY) minY = (*point)[1];
-        if ((*point)[1]>maxY) maxY = (*point)[1];
-        
-        if ((*point)[2]<minZ) minZ = (*point)[2];
-        if ((*point)[2]>maxZ) maxZ = (*point)[2];
-    }
-    Z3i::RealPoint p1(minX,minY,minZ);
-    Z3i::RealPoint p2(maxX,maxY,maxZ);
-    return std::make_pair(p1, p2);
 }
 
 //Get all intersecting rays to mesh

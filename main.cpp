@@ -14,7 +14,7 @@ void test2D(std::string filename) {
     //Read input polygon
     Polygon2Di poly = readFile2D<int>(filename);
     //Compute Gauss digitization of the polygon
-    std::vector<Point2Di> gd = GaussDigization(poly);
+    std::vector<Point2Di> gd = GaussDigization<int>(poly);
     
 #ifdef WITH_DGTAL
     //std::cout<<"WITH_DGTAL"<<std::endl;

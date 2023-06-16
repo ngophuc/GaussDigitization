@@ -24,5 +24,5 @@ To install the tools you have to follow the following steps:
 - To activate DGtal:
   From the GaussDigitization directory:
     mkdir build; cd build
-    cmake .. -DWITH_GMP=true
+    cmake .. -DWITH_DGTAL=true [-DDGtal_DIR=dgtal_build_path]
     make -j 5

@@ -32,8 +32,8 @@ If you activate DGtal, then it outputs :
 
 - Example of exection in 3D :
 
-<code>./GaussDigitization ../Samples/camel.2d</code>
+<code>./GaussDigitization ../Samples/camel.off 3D</code>
 
-<code>./GaussDigitization ../Samples/bunny.2d</code>
+<code>./GaussDigitization ../Samples/bunny.off 3D</code>
 
-<code>./GaussDigitization ../Samples/blobby.2d</code>
+<code>./GaussDigitization ../Samples/blobby.off 3D</code>
